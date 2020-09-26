@@ -1,0 +1,63 @@
+copycat - A dumb local video caching service
+============================================
+
+Did your youtube consumer experience turn painful lately, due to all
+the perennial, aggressive embedded advertisements and the pervasive
+tracking?
+
+The purpose of copycat is to provide a locally hosted video service
+accessible from all your devices. It is a program that you can run
+on your home server or NAS. The videos are sourced from youtube or
+any other online video sharing site, via youtube-dl. Clients are able
+to browse and play downloaded videos, without needing to re-access
+them from youtube on each replay. This is desirable from a user
+perspective (re-gained privacy and no advertising inserts).
+
+The main database of videos consists of a single CSV file with an
+added twist: fields are separated by NUL / '\0' / 0x00 instead of
+the conventional comma or semicolon. Records are still separated
+by newlines ('\n').
+
+Currently, the site is generated on-the-fly via bashttpd, but this
+is likely going to be changed to a static site regenerated on each
+change (e.g., new video).
+
+Media content should really be served by something more serious
+than bashttpd, to support proper range-based GETs (essential if you
+want to be able to jump around in anything but the smallest videos).
+Therefore, this should be fronted by something like an nginx reverse
+proxy. A suitable config for doing this is below. Note the location
+for /data: this ensures that media files stored under the data/
+subdirectory below the copycat installation dir will be directly
+served by nginx and not go through the copycat webserver.
+
+---- /etc/nginx/sites-enabled/video ---
+server {
+    listen 80;
+
+    server_name video.lan;
+
+    access_log            /var/log/nginx/video-access.log;
+
+    proxy_request_buffering off;
+    proxy_buffering off;
+    proxy_buffer_size 4k;
+
+    location / {
+
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+
+        proxy_pass          http://127.0.0.1:8799/;
+        proxy_read_timeout  120;
+    }
+
+    location /data/ {
+        root /path/to/copycat;
+        autoindex on;
+        autoindex_exact_size off;
+    }
+}
+--- END SNIPPET ---

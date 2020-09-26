@@ -1,0 +1,44 @@
+body {
+   padding-left: 1em;
+   font-family: Helvetica, sans-serif;
+   background: #ddd;
+}
+
+h2 {
+}
+
+span {
+   float: left;
+   padding: 3px 3px 3px 3px;
+}
+
+table {
+   border: 1px dashed gray;
+   background: #fff;
+}
+
+td.cc-title {
+}
+td.cc-saved {
+   color: #444;
+}
+td.cc-origin {
+   text-align: right;
+   color: #444;
+}
+
+a.cc-origin:link {
+   text-decoration: none;
+}
+
+a.cc-origin:visited {
+   text-decoration: none;
+}
+
+a.cc-origin:hover {
+   text-decoration: underline;
+}
+
+a.cc-origin:active {
+   text-decoration: underline;
+}
