@@ -153,7 +153,7 @@ send_response_ok_exit() {
 
 fail_with() {
    send_http_headers "$1" <<< "$1 ${HTTP_RESPONSE[$1]}"
-   exit 1
+   exit 0
 }
 
 serve_file() {
@@ -166,6 +166,9 @@ serve_file() {
        ;;
      *\.js)
        CONTENT_TYPE="text/javascript"
+       ;;
+     *\.evt)
+       CONTENT_TYPE="text/event-stream"
        ;;
      *)
        read -r CONTENT_TYPE   < <(file -b --mime-type "$file")

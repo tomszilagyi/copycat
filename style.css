@@ -12,6 +12,10 @@ span {
    padding: 3px 3px 3px 3px;
 }
 
+p.errormsg {
+   color: #f00;
+}
+
 table {
    border: 1px dashed gray;
    background: #fff;

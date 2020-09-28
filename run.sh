@@ -21,4 +21,6 @@ CHECK_DEPS gawk socat sha256sum convert youtube-dl ffmpegthumbnailer
 mkdir -p $(dirname $0)/data/incoming
 touch $(dirname $0)/data/data.csv
 
-socat TCP4-LISTEN:8799,fork EXEC:./bashttpd
+port=8799
+echo "Launching bashttpd listening on port $port ..."
+socat TCP4-LISTEN:$port,fork EXEC:./bashttpd

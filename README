@@ -37,7 +37,7 @@ server {
 
     server_name video.lan;
 
-    access_log            /var/log/nginx/video-access.log;
+    access_log /var/log/nginx/video-access.log;
 
     proxy_request_buffering off;
     proxy_buffering off;
@@ -45,13 +45,16 @@ server {
 
     location / {
 
-        proxy_set_header        Host $host;
-        proxy_set_header        X-Real-IP $remote_addr;
-        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header        X-Forwarded-Proto $scheme;
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto $scheme;
 
         proxy_pass          http://127.0.0.1:8799/;
-        proxy_read_timeout  120;
+        proxy_read_timeout  30;
+        proxy_cache         off;
+        expires             off;
+        add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
     }
 
     location /data/ {
@@ -61,3 +64,18 @@ server {
     }
 }
 --- END SNIPPET ---
+
+
+Submitting videos for download
+------------------------------
+
+Simply invoke http://<your-copycat>/add/<youtube-video-url>
+
+A simple but convenient way to do this is to add a bookmark to the
+bookmarks toolbar of your browser with the following destination:
+
+    javascript:location.href="http://<your-copycat>/add/"+encodeURIComponent(location.href)
+
+Save this with a name such as "copycat this" or similar. Then,
+whenever you are watching a youtube video that you would like to
+cache, just press "copycat this" in the bookmarks toolbar.
