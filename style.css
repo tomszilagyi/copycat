@@ -17,8 +17,27 @@ p.errormsg {
 }
 
 table {
-   border: 1px dashed gray;
+   border-collapse: collapse;
+   border: 1px solid #aaa;
    background: #fff;
+}
+
+td, th {
+   padding: 6px;
+}
+
+th {
+   background-color: #486;
+   color: white;
+}
+
+.trashed-items {
+   padding: 5px;
+   text-align: left;
+}
+
+tr.trashed-items:nth-child(even) {
+   background-color: #eee;
 }
 
 td.cc-title {

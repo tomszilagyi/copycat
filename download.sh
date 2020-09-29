@@ -41,9 +41,9 @@ rc=$?
 [ $rc -ne 0 ] && echo "Error: ffmpegthumbnailer: rc=$rc" && exit 1
 convert "$hash.jpg" -resize 400x225 "$hash.jpg"
 
-printf "%s\0%s\0%s\0%s\0%s\n" "$hash" "YouTube" "$url" "$title" "$date" > data.csv.$$
-cat data.csv >> data.csv.$$
-mv data.csv.$$ data.csv
+printf "%s\0%s\0%s\0%s\0%s\n" "$hash" "YouTube" "$url" "$title" "$date" > videos.dat.$$
+cat videos.dat >> videos.dat.$$
+mv videos.dat.$$ videos.dat
 
 # This is picked up by the web client and triggers a redirect to main page
 echo "DONE"

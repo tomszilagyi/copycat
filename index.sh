@@ -1,13 +1,24 @@
 #!/bin/bash
 
-echo "<html><head>"
-echo "<meta charset=\"UTF-8\">"
-echo "<link rel=\"stylesheet\" href=\"style.css\">"
-echo "<title>copycat</title>"
-echo "</head><body>"
+cat <<EOF
+<html><head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
+<title>copycat</title>
+</head><body>
 
-echo "<h2>Last saved videos</h2>"
+<h2>Last saved videos</h2>
 
-awk -F '\0' -f index.awk data/data.csv
+<form id="trash" action="/trash" method="get">
+<p>
+   <input type="submit" value="Trash selected">
+   <a href="/trashed"><button type="button">List trashed</button></a>
+</p>
+EOF
 
-echo "</body></html>"
+awk -F '\0' -f index.awk data/videos.dat
+
+cat <<EOF
+</form>
+</body></html>
+EOF

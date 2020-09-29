@@ -18,7 +18,7 @@ if [ $? -ne 0 ] ; then
    exit 0
 fi
 
-grep -q "$url" data/data.csv
+grep -q "$url" data/videos.dat
 if [ $? -eq 0 ] ; then
    echo "<p class=\"errormsg\">Already downloaded: $@</p>"
    echo "</body></html>"
