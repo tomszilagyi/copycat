@@ -1,10 +1,15 @@
 body {
-   padding-left: 1em;
    font-family: Helvetica, sans-serif;
    background: #ddd;
+   margin: 0px;
 }
 
-h2 {
+div.console {
+   margin: 1em;
+}
+
+.video-list {
+   margin: 0.5em;
 }
 
 span {
@@ -27,7 +32,7 @@ td, th {
 }
 
 th {
-   background-color: #486;
+   background-color: #333;
    color: white;
 }
 
@@ -40,14 +45,21 @@ tr.trashed-items:nth-child(even) {
    background-color: #eee;
 }
 
+div.cc-title {
+   white-space: nowrap;
+   width: 400px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   margin-left: 3px;
+}
+
 td.cc-title {
+   padding: 3px;
 }
-td.cc-saved {
+
+td.cc-attrs {
    color: #444;
-}
-td.cc-origin {
-   text-align: right;
-   color: #444;
+   padding: 3px;
 }
 
 a.cc-origin:link {
@@ -64,4 +76,47 @@ a.cc-origin:hover {
 
 a.cc-origin:active {
    text-decoration: underline;
+}
+
+input, button {
+   border: 1px solid black;
+   border-radius: 5px;
+   padding: 5px 15px;
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+   font-size: 12px;
+   font-family: Arial;
+}
+
+.trash-button {
+   font-weight: bold;
+}
+
+.del-tick {
+   margin-right: 6px;
+}
+
+.trash-button {
+   background-color: #c00;
+   color: #fff;
+   margin-right: 1em;
+}
+
+.list-trash-button {
+   background-color: #fff;
+   color: #000;
+   margin-right: 1em;
+}
+
+#search {
+   border-radius: 0px;
+   text-align: left;
+   padding: 5px 5px;
+}
+
+#nav {
+   color: #fff;
+   background-color: #333;
+   padding: 10px 10px;
 }

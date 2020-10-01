@@ -1,13 +1,16 @@
 #!/bin/bash
 
-echo "<html><head>"
-echo "<meta charset=\"UTF-8\">"
-echo "<link rel=\"stylesheet\" href=\"style.css\">"
-echo "<title>copycat</title>"
-echo "</head><body>"
+cat <<EOF
+<html><head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
+<title>copycat</title>
+</head><body>
 
-echo "<h2>Trashing video(s)</h2>"
-echo "<pre>"
+<div class="console">
+<h2>Trashing video(s)</h2>
+<pre>
+EOF
 
 date=$(date +"%Y-%m-%d %T")
 error=0
@@ -41,7 +44,7 @@ for h in $list; do
             ;;
     esac
 done
-echo "</pre>"
+echo "</div></pre>"
 
 # Only auto-redirect back to main if everything was sunny day
 if [ $error -eq 0 ] ; then

@@ -7,6 +7,7 @@ cat <<EOF
 <title>copycat</title>
 </head><body>
 
+<div class="console">
 <h2>Trashed videos</h2>
 
 <table>
@@ -19,9 +20,10 @@ cat <<EOF
 </tr>
 EOF
 
-awk -F '\0' -f trashed.awk data/trash.dat
+tac data/trash.dat | awk -F '\0' -f trashed.awk
 
 cat <<EOF
 </table>
+</div>
 </body></html>
 EOF

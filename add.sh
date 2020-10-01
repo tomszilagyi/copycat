@@ -1,12 +1,15 @@
 #!/bin/bash
 
-echo "<html><head>"
-echo "<meta charset=\"UTF-8\">"
-echo "<link rel=\"stylesheet\" href=\"style.css\">"
-echo "<title>copycat</title>"
-echo "</head><body>"
+cat <<EOF
+<html><head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
+<title>copycat</title>
+</head><body>
 
-echo "<h2>Adding video</h2>"
+<div class="console">
+<h2>Adding video</h2>
+EOF
 
 # Restore double-slash after protocol lost to proxy url normalization
 url=$(echo "$@" | sed -e 's|^\([^:]*\):/\([^/]\)|\1://\2|')
@@ -31,6 +34,7 @@ dlpid=$!
 
 cat <<EOF
 <pre><div id="result"></div></pre>
+</div>
 
 <script type="text/javascript">
 if (typeof(EventSource) !== "undefined") {
@@ -46,6 +50,5 @@ else
    document.getElementById("result").innerHTML="Your browser doesn't receive server-sent events.";
 }
 </script>
+</body></html>
 EOF
-
-echo "</body></html>"
