@@ -1,12 +1,13 @@
-#!/usr/bin/env bash
-#
+#!/bin/bash
+
 # A simple, configurable HTTP server written in bash.
 #
-# See LICENSE for licensing information.
+# Released under the MIT license; see LICENSE for licensing information.
 #
 # Original author: Avleen Vig, 2012
 # Reworked by:     Josh Cartwright, 2012
 #                  rochajoel@google.com, 2017
+# Further touches: Tom Szilagyi, 2020
 
 warn() { echo "WARNING: $@" >&2; }
 
@@ -105,9 +106,21 @@ EOF
    exit 1
 }
 
-recv() { echo "< $@" >&2; }
-send() { echo "> $@" >&2;
-         printf '%s\r\n' "$*"; }
+# Uncomment this to receive verbose send/recv logs
+#DEBUG=1
+
+# Debug (verbose logs of input/output):
+recv_dbg() { echo "< $@" >&2; }
+send_dbg() { echo "> $@" >&2; }
+
+# Logs (less verbose):
+recv() {
+    echo "$(date +'%Y-%m-%d %H:%M:%S') $@" >&2;
+}
+send() {
+    [ $DEBUG ] && send_dbg $@
+    printf '%s\r\n' "$*";
+}
 
 [[ $UID = 0 ]] && warn "It is not recommended to run bashttpd as root."
 
@@ -268,23 +281,26 @@ read -r line || fail_with 400
 
 # strip trailing CR if it exists
 line=${line%%$'\r'}
-recv "$line"
+[ $DEBUG ] && recv_dbg "$line"
 
 read -r REQUEST_METHOD REQUEST_URI REQUEST_HTTP_VERSION <<<"$line"
 
 [ -n "$REQUEST_METHOD" ] && \
 [ -n "$REQUEST_URI" ] && \
 [ -n "$REQUEST_HTTP_VERSION" ] \
-   || fail_with 400
+    || fail_with 400
 
-# Only GET is supported at this time
+# Enable this for non-debug
+recv "${REQUEST_METHOD}" "${REQUEST_URI}" "${REQUEST_HTTP_VERSION}"
+
+# Only GET and POST methods are supported at this time
 [ "$REQUEST_METHOD" = "GET" ] || [ "$REQUEST_METHOD" = "POST" ] || fail_with 405
 
 declare -a REQUEST_HEADERS
 
 while read -r line; do
    line=${line%%$'\r'}
-   recv "$line"
+   [ $DEBUG ] && recv_dbg "$line"
 
    # If we've reached the end of the headers, break.
    [ -z "$line" ] && break

@@ -1,35 +1,75 @@
-copycat - A dumb local video caching service
-============================================
+copycat - Your dumb local video collection
+==========================================
 
-Did your youtube consumer experience turn painful lately, due to all
-the perennial, aggressive embedded advertisements and the pervasive
-tracking?
+Do you tend to watch the same favourite videos over and over again?
+Did your youtube user experience turn painful lately, due to
+perennial, aggressive embedded advertisements? Do you mind Big Brother
+watching you each time you watch a movie? Maybe you have children who
+like cartoons, but you don't want them accidentally stumbling into
+other content (and did I mention the obnoxious ads before nearly all
+videos)?
 
 The purpose of copycat is to provide a locally hosted video service
-accessible from all your devices. It is a program that you can run
-on your home server or NAS. The videos are sourced from youtube or
-any other online video sharing site, via youtube-dl. Clients are able
-to browse and play downloaded videos, without needing to re-access
-them from youtube on each replay. This is desirable from a user
-perspective (re-gained privacy and no advertising inserts).
+accessible from all your devices. It runs perfectly on your home
+server or NAS. The videos are sourced from youtube or any other online
+video sharing site supported by youtube-dl. Clients are able to browse
+and play downloaded videos, without re-downloading them from youtube
+on each replay. This is valuable from a user perspective (re-gained
+privacy and no advertising inserts ever)!
 
-The main database of videos consists of a single CSV file with an
-added twist: fields are separated by NUL / '\0' / 0x00 instead of
-the conventional comma or semicolon. Records are still separated
-by newlines ('\n').
 
-Currently, the site is generated on-the-fly via bashttpd, but this
-is likely going to be changed to a static site regenerated on each
-change (e.g., new video).
+Features
+--------
 
-Media content should really be served by something more serious
-than bashttpd, to support proper range-based GETs (essential if you
-want to be able to jump around in anything but the smallest videos).
-Therefore, this should be fronted by something like an nginx reverse
-proxy. A suitable config for doing this is below. Note the location
-for /data: this ensures that media files stored under the data/
-subdirectory below the copycat installation dir will be directly
-served by nginx and not go through the copycat webserver.
+- Drive youtube-dl to download individual videos or playlists of
+  videos from any site supported by youtube-dl.
+
+- Videos are downloaded in a format suitable for playback on all
+  modern HTML5-supporting browsers, both mobile and desktop.
+
+- Videos are shown with their auto-generated thumbnail, title, source
+  site (youtube, vimeo, etc.), and link to original.
+
+- Interactive narrowing search based on video titles, using multiple
+  search keywords with instantly updating results. If you like Emacs
+  Helm (or anything similar), you will love this.
+
+- Seamless editing of video titles for organization (search relies on
+  these, so be strategic about them if you plan to have many videos).
+  Just click on the title and edit in place. It will be saved back to
+  the copycat server when the focus is moved elsewhere.
+
+- Ability to trash videos (remove them, freeing up precious storage
+  space, but retaining an audit trail that makes it trivial to
+  re-download them later).
+
+- Simple, boring, dumb technology, both front and back. Less than 1000
+  lines of total implementation code.
+
+- Completely self-hosted.
+
+- MIT license.
+
+
+Setup
+-----
+
+For local development purposes, just run the appropriately named
+script (./run.sh) and direct your browser to http://127.0.0.1:8799.
+
+If you actually want to watch videos, you need to front copycat's
+webserver with a reverse proxy and arrange for the static media files
+to be served directly by a real webserver. This is essential to
+support range-based GETs (for prompt playback and the ability to jump
+around in anything but the smallest videos).
+
+If you use nginx, a suitable config for doing this is below. Note the
+location block /data/: this ensures that media files stored within the
+data/ subdirectory of the copycat installation will be directly served
+by nginx and not go through the copycat webserver.
+
+If you use some other webserver, you need to create an equivalent
+configuration on your own.
 
 ---- /etc/nginx/sites-enabled/video ---
 server {
@@ -72,10 +112,70 @@ Submitting videos for download
 Simply invoke http://<your-copycat>/add/<youtube-video-url>
 
 A simple but convenient way to do this is to add a bookmark to the
-bookmarks toolbar of your browser with the following destination:
+bookmarks toolbar of your browser with the following destination
+(carefully copy this verbatim into the field for Target or Destination
+URL):
 
     javascript:location.href="http://<your-copycat>/add/"+encodeURIComponent(location.href)
 
-Save this with a name such as "copycat this" or similar. Then,
+Save the bookmark with a name such as "copycat this" or similar. Then,
 whenever you are watching a youtube video that you would like to
-cache, just press "copycat this" in the bookmarks toolbar.
+cache, just press the "copycat this" button in the bookmarks toolbar,
+sit back, and wait. This also works for playlists (copycat will
+download all the videos in the playlist).
+
+
+Caveats and Disclaimers
+-----------------------
+
+This is not designed to be a proper web application that scales to a
+very large amount of videos and to several independent users. This is
+the kind of project that you could do in a single weekend if you were
+so inclined (I was not, but the amount of work put into it, taken
+together, is comparable). In short: it is a small, simple solution
+that works under limited circumstances.
+
+Of particular note: there is no "database locking" in place, so if
+multiple clients are aggressively downloading or trashing videos at
+the same time, you might get into trouble. (The time window for this
+should be very small, but you have been warned. Also, please re-read
+the previous paragraph.)
+
+There is nothing akin to a user account, so if several people want
+disjunct sets of videos then maybe best to set up multiple personal
+instances.
+
+Please take full responsibility for the security of your own computing
+environment. DO NOT UNDER ANY CIRCUMSTANCES expose a 'naked' copycat
+to the Internet without appropriate protection / reverse proxying in
+front of it. I would strongly recommend adding mandatory SSL
+termination and user authorization (customarily provided by an nginx
+reverse proxy) if you wish to make your instance available from
+anywhere outside your trusted home network.
+
+The copycat backend is only used on Linux and completely untested
+anywhere else. In principle there should be nothing Linux-specific
+about it, so it should work fine on other UNIX-like systems such as
+BSDs (including Mac OS X). Common utilities (awk, bash, etc.) might
+differ in versions or flavours though, so YMMV. The frontend has been
+tested with Firefox on Linux and Chrome on Android. As usual, THERE IS
+NO WARRANTY and THERE IS NO SUPPORT.
+
+
+Implementation notes
+--------------------
+
+The copycat backend runs on a minimal, embedded webserver implemented
+in bash (yes, you read that right). Dynamically generated site content
+(everything besides static stuff like js, css, thumbnail and video
+files) is generated by a mixture of bash and awk.
+
+The main database of videos consists of a single CSV-like file called
+videos.dat, with an added twist: fields are separated by NUL / '\0'
+instead of the conventional comma or semicolon. Records are still
+separated by newlines ('\n'). This makes free-form content easier to
+handle without relying on excessive field quotation.
+
+Currently, the site is generated on-the-fly on each HTTP request, but
+this could easily be changed to a static site regenerated on each
+change (e.g., new video) for much higher performance.

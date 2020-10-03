@@ -17,11 +17,12 @@ function CHECK_DEPS {
 
 CHECK_DEPS gawk socat sha256sum convert youtube-dl ffmpegthumbnailer
 
+cd $(dirname $0)
 # Make sure directory structure exists
-mkdir -p $(dirname $0)/data/incoming
-touch $(dirname $0)/data/videos.dat
-touch $(dirname $0)/data/trash.dat
+mkdir -p data/incoming
+touch data/videos.dat
+touch data/trash.dat
 
 port=8799
-echo "Launching bashttpd listening on port $port ..."
-socat TCP4-LISTEN:$port,fork EXEC:./bashttpd
+echo "Launching socat/bashttpd listening on port $port ..."
+socat TCP4-LISTEN:$port,bind=127.0.0.1,reuseaddr,fork EXEC:./bashttpd
