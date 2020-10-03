@@ -1,10 +1,13 @@
 $(function() {
    $( '.video-list' ).searchable({
       selector      : 'span',
-      childSelector : 'div',
+      childSelector : 'input',
       searchField   : '#search',
       searchType    : 'helm',
       ignoreDiacritics : true,
+      getContent    : function( elem ) {
+         return elem[0].value;
+      },
       hide          : function( elem ) {
          elem.fadeOut(100);
       },

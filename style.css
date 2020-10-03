@@ -45,16 +45,10 @@ tr.trashed-items:nth-child(even) {
    background-color: #eee;
 }
 
-div.cc-title {
-   white-space: nowrap;
-   width: 400px;
-   overflow: hidden;
-   text-overflow: ellipsis;
-   margin-left: 3px;
-}
-
 td.cc-title {
-   padding: 3px;
+   padding: 1px;
+   padding-left: 6px;
+   padding-right: 6px;
 }
 
 td.cc-attrs {
@@ -107,6 +101,14 @@ input, button {
    background-color: #fff;
    color: #000;
    margin-right: 1em;
+}
+
+input.cc-title {
+   border: none;
+   text-align: left;
+   font-size: 16px;
+   padding: 1px 1px;
+   width: 400px;
 }
 
 #search {

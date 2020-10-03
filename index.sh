@@ -26,5 +26,24 @@ tac data/videos.dat | awk -F '\0' -f index.awk
 cat <<EOF
 </div>
 </form>
+
+<script type="text/javascript">
+function changeTitle (event) {
+   //console.log ("new title for " + event.target.id + ": " + event.target.value);
+   fetch ("/settitle/" + event.target.id + "/" + event.target.value)
+   .then (function (response) {
+      return response.json();
+   })
+   .then (function (json) {
+      console.log(json);
+      if (json.result !== "ok")
+         alert ("Could not set title on server.\nReason: " + json.reason);
+   })
+   .catch(function (error) {
+      alert ("Error: " + error);
+   });
+}
+</script>
+
 </body></html>
 EOF

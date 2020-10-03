@@ -18,8 +18,9 @@
    printf "<span>"
    printf "<table style=\"border-spacing: 5px;\">"
    printf "<tr><td><a href=\"%s\"><img src=\"%s\"></a></td></tr>", video, thumb
-   printf "<tr><td class=\"cc-title\"><div class=\"cc-title\">"
-   printf "%s</div></td></tr>", title
+   printf "<tr><td class=\"cc-title\"><input type=\"text\" class=\"cc-title\" "
+   printf "id=\"%s\" onchange=\"changeTitle(event)\" value=\"%s\">", shash, title
+   printf "</td></tr>", title
    printf "<tr><td class=\"cc-attrs\">"
    printf "<input type=\"checkbox\" class=\"del-tick\" name=\"h\" value=\"%s\">", shash
    printf "Saved: %s", saved
