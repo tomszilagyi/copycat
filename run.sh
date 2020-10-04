@@ -15,7 +15,7 @@ function CHECK_DEPS {
     fi
 }
 
-CHECK_DEPS gawk socat sha256sum convert youtube-dl ffmpegthumbnailer
+CHECK_DEPS convert ffmpeg ffmpegthumbnailer gawk sha256sum socat youtube-dl
 
 cd $(dirname $0)
 # Make sure directory structure exists

@@ -69,7 +69,8 @@ data/ subdirectory of the copycat installation will be directly served
 by nginx and not go through the copycat webserver.
 
 If you use some other webserver, you need to create an equivalent
-configuration on your own.
+configuration on your own. Alternatively, read on to learn how to run
+copycat with nginx from a docker image.
 
 ---- /etc/nginx/sites-enabled/video ---
 server {
@@ -104,6 +105,47 @@ server {
     }
 }
 --- END SNIPPET ---
+
+
+Run with docker
+---------------
+
+You can build a docker image containing a copycat instance plus an
+nginx frontend serving static media files and acting as reverse proxy
+(as recommended above).
+
+To build the image, run this command from this directory (the copycat
+repository root):
+
+    docker build --tag=copycat:latest .
+
+This will take some time and emit a voluminous amount of output, but
+if everything went well, it will end similar to this:
+
+    Successfully built xxxxxxxxxxxx
+    Successfully tagged copycat:latest
+
+Having built the image, all that is left is launching an instance, which
+will create a running docker container. Use a command similar to this:
+
+    docker run -p 0.0.0.0:8000:80 -v </path/to/data>:/copycat/data copycat
+
+Feel free to change the host binding of the listening port to the
+binding address and port as appropriate. The example shown above will
+make the server listen on port 8000, accessible from all network
+interfaces (so you can also access it from another host, if you type
+the right host address). If you would like to restrict connections
+from within the same host (e.g., because you run this behind yet
+another reverse proxy on the same host) change 0.0.0.0 to 127.0.0.1.
+
+Note: within the docker image, both nginx and copycat will effectively
+run under the www-data user account. Please ensure that the path to
+the mounted data storage </path/to/data> has its permissions set so
+that user www-data has write access to it. This volume will hold all
+persistent data (the database and media files), so that you can freely
+stop/restart the docker container, or even rebuild it after making
+modifications to the sources, and still have all your data intact next
+time you launch the site.
 
 
 Submitting videos for download

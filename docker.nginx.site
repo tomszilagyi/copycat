@@ -1,0 +1,29 @@
+# Nginx config for serving copycat from within docker
+
+server {
+    listen 80 default_server;
+
+    proxy_request_buffering off;
+    proxy_buffering off;
+    proxy_buffer_size 4k;
+
+    location / {
+
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto $scheme;
+
+        proxy_pass          http://127.0.0.1:8799/;
+        proxy_read_timeout  30;
+        proxy_cache         off;
+        expires             off;
+        add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+    }
+
+    location /data/ {
+        root /copycat;
+        autoindex on;
+        autoindex_exact_size off;
+    }
+}
