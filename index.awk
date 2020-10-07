@@ -15,16 +15,17 @@
    thumb = sprintf("/data/%s.jpg", hash)
    shash = substr(hash, 1, HASHLEN)
 
-   printf "<span>"
+   printf "<span class=\"video-card\" id=\"%s\">", hash
    printf "<table style=\"border-spacing: 5px;\">"
-   printf "<tr><td><a href=\"%s\"><img src=\"%s\"></a></td></tr>", video, thumb
+   printf "<tr><td><img onclick='selectVideo(\"%s\")' ", hash
+   printf "src=\"%s\"></td></tr>", thumb
    printf "<tr><td class=\"cc-title\"><input type=\"text\" class=\"cc-title\" "
    printf "id=\"%s\" onchange=\"changeTitle(event)\" value=\"%s\">", shash, title
-   printf "</td></tr>", title
+   printf "</td></tr>"
    printf "<tr><td class=\"cc-attrs\">"
    printf "<input type=\"checkbox\" class=\"del-tick\" name=\"h\" value=\"%s\">", shash
-   printf "Saved: %s", saved
-   printf " from <a class=\"cc-origin\" href=\"%s\">%s</a></td></tr>", url, source
+   printf "<span class=\"cc-attrs\">Saved: %s", saved
+   printf " from <a class=\"cc-origin\" href=\"%s\">%s</a></span></td></tr>", url, source
    printf "</table>"
    printf "</span>"
    printf "\n"

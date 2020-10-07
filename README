@@ -34,6 +34,12 @@ Features
   search keywords with instantly updating results. If you like Emacs
   Helm (or anything similar), you will love this.
 
+- Ability to instantly play individual videos or enqueue them into a
+  playlist for sequential playing (preserves player settings, e.g.,
+  volume and full-size, across videos). Add all search results to a
+  playlist with a single click.  Playlists are ephemeral and
+  browser-local.
+
 - Seamless editing of video titles for organization (search relies on
   these, so be strategic about them if you plan to have many videos).
   Just click on the title and edit in place. It will be saved back to

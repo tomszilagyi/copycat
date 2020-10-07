@@ -14,7 +14,7 @@ EOF
 
 date=$(date +"%Y-%m-%d %T")
 error=0
-list=$(echo $@ | sed -e 's/?h=/ /' -e 's/&h=/ /g')
+list=$(echo $@ | sed -e 's/?$//' -e 's/^?h=/ /' -e 's/&h=/ /g')
 for h in $list; do
     n=$(awk -F '\0' "/$h/ {print \$1}" data/videos.dat | wc -l)
     case $n in

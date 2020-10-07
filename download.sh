@@ -43,7 +43,7 @@ fi
 # Loop to handle multiple videos (in case we got directed at a playlist):
 while true
 do
-    lastDl=$(ls -rt *.mp4 | head -1)
+    lastDl=$(ls -rt *.mp4 2>/dev/null | head -1)
     if [ -z "$lastDl" ]; then
         echo "No more downloaded files."
         break
