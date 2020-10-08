@@ -49,7 +49,7 @@ Features
   space, but retaining an audit trail that makes it trivial to
   re-download them later).
 
-- Simple, boring, dumb technology, both front and back. Less than 1000
+- Simple, boring, dumb technology, both front and back. Less than 2000
   lines of total implementation code.
 
 - Completely self-hosted.
