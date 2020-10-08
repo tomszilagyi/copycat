@@ -1,11 +1,7 @@
-# Nginx config for serving copycat from within docker
+# Nginx config for serving copycat from within docker (also usable outside docker)
 
 server {
     listen 80 default_server;
-
-    proxy_request_buffering off;
-    proxy_buffering off;
-    proxy_buffer_size 4k;
 
     location / {
 
@@ -17,13 +13,33 @@ server {
         proxy_pass          http://127.0.0.1:8799/;
         proxy_read_timeout  30;
         proxy_cache         off;
+        proxy_request_buffering off;
+        proxy_buffering     off;
+        proxy_buffer_size   4k;
+
         expires             off;
         add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
     }
 
     location /data/ {
         root /copycat;
+        expires 24h;
         autoindex on;
         autoindex_exact_size off;
+    }
+
+    location /favicon.ico {
+        root /copycat;
+        expires 24h;
+    }
+
+    location /js/ {
+        root /copycat;
+        expires 3h;
+    }
+
+    location /style.css {
+        root /copycat;
+        expires 3h;
     }
 }
