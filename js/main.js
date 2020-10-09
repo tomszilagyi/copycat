@@ -223,6 +223,24 @@ function init ()
    playerClose.onclick = stopAndClosePlayer;
 }
 
+function setupWelcomeLinks ()
+{
+   // N.B.: we use JS here so we can refer to the actual copycat server address.
+   var addFormat = document.getElementById ("add-format");
+   if (addFormat === null)
+      return;
+
+   addFormat.innerHTML = window.location.href + "add/VIDEO-URL";
+   var addBookmark = document.getElementById ("add-bookmark");
+   addBookmark.href="javascript:location.href=\"" + window.location.href +
+                    "add/\"+encodeURIComponent(location.href)";
+
+   var addExample = document.getElementById ("add-example");
+   addExample.href = window.location.href +
+                     "add/https://www.youtube.com/watch?v=u1kZ9zYr7kk";
+   addExample.innerHTML = addExample.href;
+}
+
 window.onclick = function (event)
 {
    if (event.target == playerLayer) // click outside player-window
@@ -240,6 +258,7 @@ window.onresize = function ()
 window.onload = function ()
 {
    init ();
+   setupWelcomeLinks ();
 
    adjustPlayerSize ();
    adjustHeight ();

@@ -30,6 +30,16 @@ div.console {
 .video-list {
    margin: 0.5em;
 }
+#videos-placeholder {
+   display: block;
+   float: left;
+   font-family: Georgia, serif;
+   font-size: 18px;
+   color: #333;
+   padding: 30px;
+   margin-left: 5%;
+}
+
 .playlist {
    margin: 0px;
    padding: 0px;
@@ -70,6 +80,15 @@ span.video-card {
 
 p.errormsg {
    color: #f00;
+}
+p.newpara {
+   margin-top: 3em;
+}
+p.hint {
+   font-size: 14px;
+}
+#add-format, #add-example, #add-bookmark {
+   margin-left: 3em;
 }
 
 table {
