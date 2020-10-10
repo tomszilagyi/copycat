@@ -3,6 +3,8 @@
 shash=$(echo $@ | sed -e 's|/.*$||')
 title=$(echo $@ | sed -e 's|^.*/||')
 
+exec 99>data/videos.dat.lock # fd 99 used as lock on changes to videos.dat
+
 n=$(awk -F '\0' "/$shash/ {print \$1}" data/videos.dat | wc -l)
 case $n in
     0)
@@ -11,12 +13,14 @@ case $n in
         ;;
     1)
         # exactly one match - update title in matching record
+        flock 99 # lock videos.dat
         cp data/videos.dat data/videos.dat.save
         awk -F '\0' \
             "/^$shash/ {printf (\"%s\0%s\0%s\0%s\0%s\n\", \$1, \$2, \$3, \"$title\", \$5)} \
              ! /^$shash/ {print \$0}" \
             data/videos.dat >> data/videos.dat.$$
         mv data/videos.dat.$$ data/videos.dat
+        flock --unlock 99 # release videos.dat
 
         msg="$shash: Title changed OK"
         error=0

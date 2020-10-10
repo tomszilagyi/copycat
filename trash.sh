@@ -13,6 +13,8 @@ cat <<EOF
 <pre>
 EOF
 
+exec 99>data/videos.dat.lock # fd 99 used as lock on changes to videos.dat
+
 date=$(date +"%Y-%m-%d %T")
 error=0
 list=$(echo $@ | sed -e 's/?$//' -e 's/^?h=/ /' -e 's/&h=/ /g')
@@ -34,8 +36,10 @@ for h in $list; do
             rm -f data/$hash.mp4 data/$hash.jpg
 
             # remove line from videos.dat
+            flock 99 # lock videos.dat
             grep -a -v "^$hash" data/videos.dat > data/videos.$$.dat
             mv data/videos.$$.dat data/videos.dat
+            flock --unlock 99 # release videos.dat
 
             echo "- $h: Trashed OK"
             ;;

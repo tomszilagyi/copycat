@@ -62,6 +62,10 @@ Setup
 
 For local development purposes, just run the appropriately named
 script (./run.sh) and direct your browser to http://127.0.0.1:8799.
+For prerequisites you need installed beforehand, best to look at the
+Dockerfile (this is for Debian but should be directly applicable if
+you use another distro). The run.sh script will also verify that all
+required executables are present and error out if anything is missing.
 
 If you actually want to watch videos, you need to front copycat's
 webserver with a reverse proxy and arrange for the static media files
@@ -187,12 +191,6 @@ the kind of project that you could do in a single weekend if you were
 so inclined (I was not, but the amount of work put into it, taken
 together, is not much more than that). In short: it is a small, simple
 solution that works under limited circumstances.
-
-Of particular note: there is no "database locking" in place, so if
-multiple clients are aggressively editing titles or trashing videos at
-the same time, you might get into trouble. (The time window for this
-should be very small, but you have been warned. Also, please re-read
-the previous paragraph.)
 
 There is nothing akin to a user account, so if several people want
 disjunct sets of videos then maybe best to set up multiple personal

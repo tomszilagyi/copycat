@@ -11,16 +11,18 @@
 url=$1
 
 datadir=$(readlink -f $(dirname $0)/data)
-cd $(dirname $0)/data/incoming
+incoming=$(dirname $0)/data/incoming.$$
+mkdir -p $incoming
+cd $incoming
 
-dllog=$(readlink -f download.$$.log)
+dllog=$(readlink -f download.log)
 exec > $dllog
 
 function cleanup () {
     # Allow some time for the web client to pick this up, then clean up
     sleep 2
-    rm -f $dllog
-    rm -f $(dirname $dllog)/$$.evt
+    cd - >/dev/null
+    rm -rf $incoming
 }
 trap cleanup EXIT
 
@@ -39,6 +41,8 @@ if [ $rc -ne 0 ] ; then
     echo "ERROR" # signal web client
     exit 1
 fi
+
+exec 99>$datadir/videos.dat.lock # fd 99 used as lock on changes to videos.dat
 
 # Loop to handle multiple videos (in case we got directed at a playlist):
 while true
@@ -71,8 +75,10 @@ do
     fi
     convert "$datadir/$hash.jpg" -resize 400x225 "$datadir/$hash.jpg"
 
+    flock 99 # lock videos.dat
     printf "%s\0%s\0%s\0%s\0%s\n" "$hash" "$source" "$url" "$title" "$date" \
            >> $datadir/videos.dat
+    flock --unlock 99 # release videos.dat
 done
 
 echo "DONE" # signal web client

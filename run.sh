@@ -15,11 +15,11 @@ function CHECK_DEPS {
     fi
 }
 
-CHECK_DEPS convert ffmpeg ffmpegthumbnailer gawk sha256sum socat youtube-dl
+CHECK_DEPS convert ffmpeg ffmpegthumbnailer flock gawk sha256sum socat youtube-dl
 
 cd $(dirname $0)
-# Make sure directory structure exists
-mkdir -p data/incoming
+
+# Create empty "database" (:
 touch data/videos.dat
 touch data/trash.dat
 
