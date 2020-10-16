@@ -17,6 +17,9 @@ and play downloaded videos, without re-downloading them from youtube
 on each replay. This is valuable from a user perspective (re-gained
 privacy and no advertising inserts ever)!
 
+To give you an idea of how copycat looks and behaves, take a look at
+this overview of the web interface:
+https://github.com/tomszilagyi/copycat/wiki/The-copycat-web-interface
 
 Features
 --------
