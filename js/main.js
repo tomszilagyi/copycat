@@ -27,7 +27,8 @@ $(function ()
 });
 
 function changeTitle (event) {
-   fetch ("/settitle/" + event.target.id + "/" + event.target.value)
+   fetch (encodeURIComponent (
+      "/settitle/" + event.target.id + "/" + event.target.value))
    .then (function (response) {
       return response.json();
    })
@@ -134,10 +135,10 @@ function handleVideoEnding ()
 
 function openAndStartPlayer (hash)
 {
-   adjustPlayerSize ();
-
    playerTitle.innerHTML = getTitle (hash);
    playerLayer.style.display = "block";
+
+   adjustPlayerSize ();
 
    player.src = "/data/" + hash + ".mp4";
    player.play ();
